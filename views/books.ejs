@@ -1,10 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>all books</title>
+  <title>Books List</title>
 </head>
 <body>
-  <h1>books</h1>
-  <%= books %>
+  <h1>All Books</h1>
+
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Book Name</th>
+        <th>Author</th>
+        <th>ISBN</th>
+        <th>Price</th>
+        <th>Book ID</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% books.forEach(function(book) { %>
+        <tr>
+          <td><%= book.bookName %></td>
+          <td><%= book.authorName %></td>
+          <td><%= book.isbn %></td>
+          <td><%= book.price %></td>
+          <td><%= book._id %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
 </body>
 </html>
