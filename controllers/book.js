@@ -1,27 +1,31 @@
-
+const Book = require("../models/book");
 let books = [];
 
-function handlegetAllBooks(req, res) {
+// Get all books
+ async function handlegetAllBooks(req, res) {
+    const bookInDB = await Book.find();//mongoose method to find all books
     return res.render("books",{
-        allBooks: "yash"
+        books: bookInDB
     });
 }
 
-function handelgetBookBYId (req,res) {
+// Get a book by ID
+async function handelgetBookBYId (req,res) {
     const id =req.params.bookId
-    const book = books.find((e) => e.id === Number(id))
+    const book = await Book.findById(id)//mongoose method to find a book by ID
     return res.json({book})
 }
 
-function handleCreateNewBook(req,res) {
+// Create a new book
+async function handleCreateNewBook(req,res) {
     const body = req.body;
-    books.push(body);
+   await Book.create(body)
     res.json({status: 'success'});
 }
-
-function handleDeleteBookById (req, res)  {
+// Delete a book by ID
+async function handleDeleteBookById (req, res)  {
     const body = req.params.bookid;
-    books = books.filter((e) => e.id !== Number(body));
+    await Book.findByIdAndDelete(body);//mongoose method to delete a book by ID
     return res.json({ status: 'deleted' });
 }
 
