@@ -1,36 +1,33 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const{logReqResponseOnConsole}= require("./middlewares/logger")
 const app = express();
+const bookRouter = require("./routes/book")
+const Path = require('path');
+const mongoose = require("mongoose");
+
+//connect to mongodb
+mongoose.connect("mongodb://localhost:27017/bookify",).then(() => {
+    console.log("Connected to MongoDB");
+}).catch((err) => {
+    console.error("MongoDB connection error:", err);
+});
+
+//middlewares
 app.use(bodyParser.json());
+app.use(logReqResponseOnConsole)
+
+//set engine 
+app.set("view engine","ejs");
+//set view files
+app.set("views",Path.resolve('views'));
 
 
-let books = [
-    ];
-
-app.get('/books', (req, res) => {
-    return res.json({  books });
-});
-
-app.get('/books/:bookId',(req,res) =>{
-    const id =req.params.bookId
-    const book = books.find((e) => e.id === Number(id))
-    return res.json({book})
-})
-
-app.post('/book',(req,res) =>{
-    const body = req.body;
-    books.push(body);
-    res.json({status: 'success'});
-});
-
- app.delete('/book/:bookid', (req, res) => {
-    const body = req.params.bookid;
-    books = books.filter((e) => e.id !== Number(body));
-    return res.json({ status: 'deleted' });
- });
+//router 
+app.use("/",bookRouter);
 
 
+//listen 
 app.listen(3000,() => {
     console.log('Server Started')
 } )
